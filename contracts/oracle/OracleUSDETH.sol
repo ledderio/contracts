@@ -11,7 +11,7 @@ contract OracleUSDETH is AbstractCurrencyOracle, Ownable {
         _current_rate = rate;
     }
 
-    function getRate() public view returns (uint256) {
+    function getRate() external view returns (uint256) {
         return _current_rate;
     }
 

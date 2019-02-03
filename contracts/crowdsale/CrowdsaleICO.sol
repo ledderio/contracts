@@ -35,13 +35,13 @@ contract CrowdsaleICO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
         _secondThresholdDiscount = secondThresholdDiscount;
     }
 
-    function calculateIncrease() public view returns (uint256){
+    function calculateIncrease() private view returns (uint256){
         uint256 sale = token().totalSupply();
         uint256 step = sale / _increaseStep;
         return step;
     }
 
-    function calculateDiscount(uint256 weiAmount) internal view returns (uint256){
+    function calculateDiscount(uint256 weiAmount) private view returns (uint256){
         uint256 usdAmount = weiAmount.mul(getCurrentRate());
         if (usdAmount > _secondThresholdAmount)
             return _secondThresholdDiscount;

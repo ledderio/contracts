@@ -21,8 +21,7 @@ contract FloatRateCrowdsale is Crowdsale {
     }
 
     function getCurrentRate() public view returns (uint256) {
-        AbstractCurrencyOracle oracle = AbstractCurrencyOracle(_oracleAddress);
-        return oracle.getRate();
+        return  AbstractCurrencyOracle(_oracleAddress).getRate();
     }
 
     function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {

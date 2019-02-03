@@ -10,6 +10,6 @@ contract LedderSharesToken is ERC20Detailed, ERC20Capped, ERC20Burnable, Ownable
 
     constructor (uint256 tokenCount) public
     ERC20Detailed("Ledder Shares Token", "LST", 18)
-    ERC20Capped(tokenCount) // 5000 tokens
+    ERC20Capped(tokenCount)
     {}
 }
