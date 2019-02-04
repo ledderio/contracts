@@ -1,12 +1,11 @@
 pragma solidity ^0.5.0;
 
-import "./FloatRateCrowdsale.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./UsdCrowdsale.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 
-contract CrowdsaleICO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
+contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale{
 
     uint256 _increaseStep;
     uint256 _firstThresholdAmount;
@@ -27,7 +26,7 @@ contract CrowdsaleICO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
         uint256 secondThresholdDiscount
     )
 
-    public FloatRateCrowdsale(oracle, rate, wallet, minUsdAmount, token){
+    public UsdCrowdsale(oracle, rate, wallet, minUsdAmount, token){
         _increaseStep = increaseStep;
         _firstThresholdAmount = firstThresholdAmount;
         _secondThresholdAmount = secondThresholdAmount;
@@ -41,8 +40,7 @@ contract CrowdsaleICO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
         return step;
     }
 
-    function calculateDiscount(uint256 weiAmount) private view returns (uint256){
-        uint256 usdAmount = weiAmount.mul(getCurrentRate());
+    function calculateDiscount(uint256 usdAmount) private view returns (uint256){
         if (usdAmount > _secondThresholdAmount)
             return _secondThresholdDiscount;
         if (usdAmount > _firstThresholdAmount)
@@ -50,10 +48,10 @@ contract CrowdsaleICO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
         return 0;
     }
 
-    function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {
-        uint256 amount = super._getTokenAmount(weiAmount);
+    function _getTokenAmountForUsd(uint256 usdAmount) internal view returns (uint256) {
+        uint256 amount = super._getTokenAmountForUsd(usdAmount);
         uint256 increase = calculateIncrease();
-        uint256 discount = calculateDiscount(weiAmount);
+        uint256 discount = calculateDiscount(usdAmount);
 
         uint256 maxPercent = 100;
         uint256 increaseAmount = amount.mul(maxPercent).div(increase + maxPercent);

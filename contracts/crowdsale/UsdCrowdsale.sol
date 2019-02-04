@@ -1,9 +1,10 @@
 pragma solidity ^0.5.0;
 
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/Crowdsale.sol";
+import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "../oracle/AbstractCurrencyOracle.sol";
 
-contract FloatRateCrowdsale is Crowdsale {
+contract UsdCrowdsale is Crowdsale, Ownable  {
 
     address _oracleAddress;
     uint256 _startRate;
@@ -25,9 +26,21 @@ contract FloatRateCrowdsale is Crowdsale {
     }
 
     function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {
-        uint usdAmount = weiAmount.mul(getCurrentRate());
+        uint256 usdAmount = weiAmount.mul(getCurrentRate());
+        return _getTokenAmountForUsd(usdAmount);
+    }
+
+    function _getTokenAmountForUsd(uint256 usdAmount) internal view returns (uint256) {
         require(usdAmount >= _minUsdAmount);
         return usdAmount.div(_startRate);
     }
 
+    function buyTokensForUsd(address beneficiary,uint256 usd) public onlyOwner payable {
+        require(beneficiary != address(0));
+        require(usd != 0);
+
+        uint256 usdAmount=usd.mul(1000);
+        uint256 tokens = _getTokenAmountForUsd(usdAmount);
+        _processPurchase(beneficiary, tokens);
+    }
 }

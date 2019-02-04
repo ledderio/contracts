@@ -10,6 +10,12 @@ async function buyTokenAndCheckBalance(investor, investmentAmount, expectedToken
     (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
 }
 
+async function buyTokenAndCheckBalanceUsd(investor, owner, investmentAmount, expectedTokenAmount) {
+    await this.crowdsale.buyTokensForUsd(investor, investmentAmount, {from: owner});
+    (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
+    (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
+}
+
 contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
 
     const RATE = new BN(10);//Start token rate - $0.01
@@ -57,7 +63,7 @@ contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
 
     it('should accept payments during the sale', async function () {
         await buyTokenAndCheckBalance.call(this, investor, ether('5'), ether('50000'));
-    });
+    })
 
     it('should discount 10%', async function () {
         await buyTokenAndCheckBalance.call(this, investor, ether('6'), ether('66000'));
@@ -66,6 +72,14 @@ contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
 
     it('should discount 20%', async function () {
         await buyTokenAndCheckBalance.call(this, investor, ether('51'), ether('612000'));
+    });
+
+    it('should working purchase per USD', async function () {
+        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('49'), {from: owner}));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('50'), ether('5000'));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('100.1'), ether('15010'));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('500'), ether('65010'));
+        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('100'), {from: investor}));
     });
 
     it('the cost rises by 1% after the sale of each of the next million tokens', async function () {

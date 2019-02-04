@@ -4,12 +4,12 @@ import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Deta
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Burnable.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Mintable.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract LedderSharesToken is ERC20Detailed, ERC20Capped, ERC20Burnable, Ownable {
+contract LedderSharesToken is ERC20Detailed, ERC20Capped {
 
     constructor (uint256 tokenCount) public
     ERC20Detailed("Ledder Shares Token", "LST", 18)
     ERC20Capped(tokenCount)
     {}
+
 }

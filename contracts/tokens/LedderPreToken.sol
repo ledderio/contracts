@@ -5,12 +5,12 @@ import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Burn
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Pausable.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Capped.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract LedderPreToken is ERC20Detailed, ERC20, Ownable, ERC20Burnable, ERC20Pausable, ERC20Capped {
+contract LedderPreToken is ERC20Detailed, ERC20Capped{
 
     constructor (uint256 tokenCount) public
     ERC20Detailed("Ledder Pre Token", "LPT", 18)
     ERC20Capped(tokenCount)
     {}
+
 }

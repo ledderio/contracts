@@ -1,11 +1,10 @@
 pragma solidity ^0.5.0;
 
-import "./FloatRateCrowdsale.sol";
+import "./UsdCrowdsale.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract CrowdsaleSTO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
+contract CrowdsaleSTO is UsdCrowdsale, MintedCrowdsale {
 
     constructor (
         address oracle,
@@ -15,5 +14,5 @@ contract CrowdsaleSTO is FloatRateCrowdsale, MintedCrowdsale, Ownable {
         ERC20Mintable token
     )
 
-    public FloatRateCrowdsale(oracle, startRate, wallet, minUsdAmount, token){}
+    public UsdCrowdsale(oracle, startRate, wallet, minUsdAmount, token){}
 }

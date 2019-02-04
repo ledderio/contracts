@@ -10,6 +10,12 @@ async function buyTokenAndCheckBalance(investor, investmentAmount, expectedToken
     (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
 }
 
+async function buyTokenAndCheckBalanceUsd(investor, owner, investmentAmount, expectedTokenAmount) {
+    await this.crowdsale.buyTokensForUsd(investor,investmentAmount, {from: owner});
+    (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
+    (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
+}
+
 contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
 
     const RATE = new BN(40000);//Rate - $40
@@ -51,6 +57,11 @@ contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
     it('should reject payments over cap', async function () {
         await buyTokenAndCheckBalance.call(this, investor, ether('1765'), ether('4853.75'));
         await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('54'), from: investor}));
+    });
+
+    it('should working purchase per USD', async function () {
+        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor,ether('4999'), {from: owner}));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('5000'), ether('125'));
     });
 
 });
