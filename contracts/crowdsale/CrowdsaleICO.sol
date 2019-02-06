@@ -5,13 +5,14 @@ import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Mint
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/validation/CappedCrowdsale.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/emission/MintedCrowdsale.sol";
 
-contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale{
+contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale {
+    using SafeMath for uint256;
 
     uint256 _increaseStep;
     uint256 _firstThresholdAmount;
     uint256 _secondThresholdAmount;
-    uint _firstThresholdDiscount;
-    uint _secondThresholdDiscount;
+    uint256 _firstThresholdDiscount;
+    uint256 _secondThresholdDiscount;
 
     constructor (
         address oracle,
@@ -36,7 +37,7 @@ contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale{
 
     function calculateIncrease() private view returns (uint256){
         uint256 sale = token().totalSupply();
-        uint256 step = sale / _increaseStep;
+        uint256 step = sale.div(_increaseStep);
         return step;
     }
 
@@ -54,8 +55,8 @@ contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale{
         uint256 discount = calculateDiscount(usdAmount);
 
         uint256 maxPercent = 100;
-        uint256 increaseAmount = amount.mul(maxPercent).div(increase + maxPercent);
-        uint256 discountAmount = increaseAmount.mul(maxPercent + discount).div(maxPercent);
+        uint256 increaseAmount = amount.mul(maxPercent).div(increase.add(maxPercent));
+        uint256 discountAmount = increaseAmount.mul(maxPercent.add(discount)).div(maxPercent);
         return discountAmount;
     }
 

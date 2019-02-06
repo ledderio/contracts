@@ -4,13 +4,14 @@ import "../../node_modules/openzeppelin-solidity/contracts/crowdsale/Crowdsale.s
 import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "../oracle/AbstractCurrencyOracle.sol";
 
-contract UsdCrowdsale is Crowdsale, Ownable  {
+contract UsdCrowdsale is Crowdsale, Ownable {
+    using SafeMath for uint256;
 
     address _oracleAddress;
     uint256 _startRate;
-    uint _minUsdAmount;
+    uint256 _minUsdAmount;
 
-    constructor (address oracleAddress, uint256 startRate, address payable wallet, uint minUsdAmount, IERC20 token)
+    constructor (address oracleAddress, uint256 startRate, address payable wallet, uint256 minUsdAmount, IERC20 token)
     public  Crowdsale(startRate, wallet, token){
         _oracleAddress = oracleAddress;
         _startRate = startRate;
@@ -22,7 +23,7 @@ contract UsdCrowdsale is Crowdsale, Ownable  {
     }
 
     function getCurrentRate() public view returns (uint256) {
-        return  AbstractCurrencyOracle(_oracleAddress).getRate();
+        return AbstractCurrencyOracle(_oracleAddress).getRate();
     }
 
     function _getTokenAmount(uint256 weiAmount) internal view returns (uint256) {
@@ -35,11 +36,11 @@ contract UsdCrowdsale is Crowdsale, Ownable  {
         return usdAmount.div(_startRate);
     }
 
-    function buyTokensForUsd(address beneficiary,uint256 usd) public onlyOwner payable {
+    function buyTokensForUsd(address beneficiary, uint256 usd) public onlyOwner payable {
         require(beneficiary != address(0));
         require(usd != 0);
 
-        uint256 usdAmount=usd.mul(1000);
+        uint256 usdAmount = usd.mul(1000);
         uint256 tokens = _getTokenAmountForUsd(usdAmount);
         _processPurchase(beneficiary, tokens);
     }
