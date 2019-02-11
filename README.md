@@ -32,7 +32,7 @@ The minimum LEDPT token price will increase by 1% in each subsequent batch (One 
 * _Tokens locked_   : No
 
 
-# Crowdsale stages
+# Crowdsale types
 
 ### PreICO
 * _Minimal insvested limit_     : 50 USD
