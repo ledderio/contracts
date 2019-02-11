@@ -18,8 +18,8 @@
 The minimum LEDPT token price will increase by 1% in each subsequent batch (One batch will include 1,000,000 LEDPT tokens). The tokens cannot be sold at a lower price. The next batch won't be issued until the previous one is sold. Also, we won't issue more tokens if we have too many unused funds left.
 
 #### Discount when buying tokens LEDPT
-* >500$ - discount 10%
-* >5000$ eth - 20%
+* 500$ - discount 10%
+* 5000$ - discount - 20%
 
 ## Ledder STO smart contract
 
