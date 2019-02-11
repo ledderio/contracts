@@ -8,7 +8,7 @@ import "../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Capp
 contract LedderSharesToken is ERC20Detailed, ERC20Capped {
 
     constructor (uint256 tokenCount) public
-    ERC20Detailed("Ledder Shares Token", "LST", 18)
+    ERC20Detailed("Ledder Shares Token", "LEDST", 18)
     ERC20Capped(tokenCount)
     {}
 
