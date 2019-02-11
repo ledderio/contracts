@@ -1,8 +1,8 @@
 ![Ledder](ledder.png "Ledder")
 
 ## Types of tokens
-*ICO - LEDPT (LedderPreToken)*  is an internal cryptocurrency that will be used before the project launch and converted into LDC after the platform launch.
-*STO - LEDST (LedderSharesToken)*  is a cryptocurrency designed for launching the project. Ledder shareholders will be able to exchange SharesTokens for Ledder Limited shares.
+* *ICO - LEDPT (LedderPreToken)*  is an internal cryptocurrency that will be used before the project launch and converted into LDC after the platform launch.
+* *STO - LEDST (LedderSharesToken)*  is a cryptocurrency designed for launching the project. Ledder shareholders will be able to exchange SharesTokens for Ledder Limited shares.
 
 ### Ledder ICO smart contract
 
