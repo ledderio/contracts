@@ -41,6 +41,9 @@ The minimum LEDPT token price will increase by 1% in each subsequent batch (One 
 * _Period_                      : 41 days
 * _Start_                       : 20 Feb 2018 00:00:00 GMT
 * _Wallet_                      : 0x6A798b59dBdf1D988541C79A79F0CBD8c8d8E4B1
+* _Token LEDPT_                 : 0xE4Ffc729AE2D9275Ce21D7A452B6003162e5dDCD
+* _Crowdsale_                   : 0x91a0c3c55422ED6655e217D07a928c5afC28572b
+
 
 ### PreSTO
 * _Minimal insvested limit_     : 5000 USD
@@ -49,6 +52,8 @@ The minimum LEDPT token price will increase by 1% in each subsequent batch (One 
 * _Period_                      : 100 days
 * _Start_                       : 20 Feb 2018 00:00:00 GMT
 * _Wallet_                      : 0xFB6E4ED253a59FBDC5Bc19a50420E659B277863B
+* _Token LEDST_                 : 0x80FB5648ceE69c42e092c093198F10f8829Ee9ed
+* _Crowdsale_                   : 0xeDDFebeBB3138079FC3AF0126c111C4530188bFE
 
 
 ## Wallets with ERC20 support
