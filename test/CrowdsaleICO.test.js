@@ -82,6 +82,16 @@ contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
         await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('100'), {from: investor}));
     });
 
+    it('should sending token', async function () {
+        var amount=new BN(1000);
+        var expectedTokenAmount=new BN(2000);
+        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
+        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
+        (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
+        (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
+        await shouldFail.reverting(this.crowdsale.sendBountyTokens(owner, amount, {from: investor}));
+    });
+
     it('the cost rises by 1% after the sale of each of the next million tokens', async function () {
         await buyTokenAndCheckBalance.call(this, investor, ether('100'), ether('1200000'));
         await buyTokenAndCheckBalance.call(this, investor, ether('100'), ether('2388118.811881188118811880'));//1% rise

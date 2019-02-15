@@ -36,12 +36,16 @@ contract UsdCrowdsale is Crowdsale, Ownable {
         return usdAmount.div(_startRate);
     }
 
-    function buyTokensForUsd(address beneficiary, uint256 usd) public onlyOwner payable {
+    function buyTokensForUsd(address beneficiary, uint256 usd) public onlyOwner {
         require(beneficiary != address(0));
         require(usd != 0);
 
         uint256 usdAmount = usd.mul(1000);
         uint256 tokens = _getTokenAmountForUsd(usdAmount);
+        _processPurchase(beneficiary, tokens);
+    }
+
+    function sendBountyTokens(address beneficiary, uint256 tokens) public onlyOwner {
         _processPurchase(beneficiary, tokens);
     }
 }

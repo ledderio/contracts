@@ -46,6 +46,16 @@ contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
         (await this.crowdsale.wallet()).should.be.equal(wallet);
     });
 
+    it('should sending token', async function () {
+        var amount=new BN(1000);
+        var expectedTokenAmount=new BN(2000);
+        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
+        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
+        (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
+        (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
+        await shouldFail.reverting(this.crowdsale.sendBountyTokens(owner, amount, {from: investor}));
+    });
+
     it('should reject payments by disadvantage cap', async function () {
         await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('45'), from: investor}));
     });
