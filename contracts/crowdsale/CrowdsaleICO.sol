@@ -9,10 +9,6 @@ contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale {
     using SafeMath for uint256;
 
     uint256 _increaseStep;
-    uint256 _firstThresholdAmount;
-    uint256 _secondThresholdAmount;
-    uint256 _firstThresholdDiscount;
-    uint256 _secondThresholdDiscount;
 
     constructor (
         address oracle,
@@ -20,19 +16,11 @@ contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale {
         uint256 rate,
         uint256 minUsdAmount,
         ERC20Mintable token,
-        uint256 increaseStep,
-        uint256 firstThresholdAmount,
-        uint256 secondThresholdAmount,
-        uint256 firstThresholdDiscount,
-        uint256 secondThresholdDiscount
+        uint256 increaseStep
     )
 
     public UsdCrowdsale(oracle, rate, wallet, minUsdAmount, token){
         _increaseStep = increaseStep;
-        _firstThresholdAmount = firstThresholdAmount;
-        _secondThresholdAmount = secondThresholdAmount;
-        _firstThresholdDiscount = firstThresholdDiscount;
-        _secondThresholdDiscount = secondThresholdDiscount;
     }
 
     function calculateIncrease() private view returns (uint256){
@@ -41,23 +29,19 @@ contract CrowdsaleICO is UsdCrowdsale, MintedCrowdsale {
         return step;
     }
 
-    function calculateDiscount(uint256 usdAmount) private view returns (uint256){
-        if (usdAmount > _secondThresholdAmount)
-            return _secondThresholdDiscount;
-        if (usdAmount > _firstThresholdAmount)
-            return _firstThresholdDiscount;
-        return 0;
-    }
-
     function _getTokenAmountForUsd(uint256 usdAmount) internal view returns (uint256) {
         uint256 amount = super._getTokenAmountForUsd(usdAmount);
-        uint256 increase = calculateIncrease();
-        uint256 discount = calculateDiscount(usdAmount);
+        uint256 steps = calculateIncrease();
 
-        uint256 maxPercent = 100;
-        uint256 increaseAmount = amount.mul(maxPercent).div(increase.add(maxPercent));
-        uint256 discountAmount = increaseAmount.mul(maxPercent.add(discount)).div(maxPercent);
-        return discountAmount;
+        uint256 p100 = 100;
+        uint256 p102 = 102;
+
+        for (uint i = 0; i < steps; i++) {
+            amount = amount.mul(p100).div(p102);
+        }
+
+        return amount;
     }
-
 }
+
+

@@ -1,7 +1,7 @@
 const {BN, balance, ether, should, shouldFail, time} = require('openzeppelin-test-helpers');
 
 const CrowdsaleICO = artifacts.require('CrowdsaleICO');
-const PreToken = artifacts.require('LedderPreToken');
+const UToken = artifacts.require('LedderUtilityToken');
 const OracleUSDETH = artifacts.require('OracleUSDETH');
 
 async function buyTokenAndCheckBalance(investor, investmentAmount, expectedTokenAmount) {
@@ -19,16 +19,12 @@ async function buyTokenAndCheckBalanceUsd(investor, owner, investmentAmount, exp
 contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
 
     const RATE = new BN(10);//Start token rate - $0.01
-    const firstThresholdDiscount = 10;
-    const secondThresholdDiscount = 20;
-    const firstThresholdAmount = new BN('500000000000000000000000');
-    const secondThresholdAmount = new BN('5000000000000000000000000');
-    const tokenCount = new BN('20000000000000000000000000');
+    const tokenCount = new BN('45000000000000000000000000');
     const increaseStep = new BN('1000000000000000000000000');
-    const minUsdAmount = new BN('50000000000000000000000'); //$50
+    const minUsdAmount = new BN('5000000000000000000000'); //$5
 
     beforeEach(async function () {
-        this.token = await PreToken.new(tokenCount, {from: deployer});
+        this.token = await UToken.new(tokenCount, {from: deployer});
         this.oracle = await OracleUSDETH.new({from: deployer});
         this.crowdsale = await CrowdsaleICO.new(
             this.oracle.address,
@@ -37,10 +33,6 @@ contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
             minUsdAmount,
             this.token.address,
             increaseStep,
-            firstThresholdAmount,
-            secondThresholdAmount,
-            firstThresholdDiscount,
-            secondThresholdDiscount,
             {from: owner}
         );
 
@@ -57,56 +49,51 @@ contract('CrowdsaleICO', function ([_, deployer, owner, wallet, investor]) {
     });
 
     it('should reject payments by disadvantage cap', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('0.5'), ether('5000'));
-        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('0.49'), from: investor}));
+        await buyTokenAndCheckBalance.call(this, investor, ether('0.05'), ether('500'));
+        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('0.049'), from: investor}));
     });
 
     it('should accept payments during the sale', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('5'), ether('50000'));
+        await buyTokenAndCheckBalance.call(this, investor, ether('0.05'), ether('500'));
     })
 
-    it('should discount 10%', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('6'), ether('66000'));
-        await buyTokenAndCheckBalance.call(this, investor, ether('50'), ether('616000'));
-    });
-
-    it('should discount 20%', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('51'), ether('612000'));
-    });
-
     it('should working purchase per USD', async function () {
-        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('49'), {from: owner}));
-        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('50'), ether('5000'));
-        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('100.1'), ether('15010'));
-        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('500'), ether('65010'));
+        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('4.9'), {from: owner}));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('5'), ether('500'));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('100.1'), ether('10510'));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('500'), ether('60510'));
         await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('100'), {from: investor}));
     });
 
     it('should sending token', async function () {
-        var amount=new BN(1000);
-        var expectedTokenAmount=new BN(2000);
-        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
-        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
+        var amount = new BN(1000);
+        var expectedTokenAmount = new BN(2000);
+        await this.crowdsale.sendDirectTokens(investor, amount, {from: owner});
+        await this.crowdsale.sendDirectTokens(investor, amount, {from: owner});
         (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
         (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
-        await shouldFail.reverting(this.crowdsale.sendBountyTokens(owner, amount, {from: investor}));
+        await shouldFail.reverting(this.crowdsale.sendDirectTokens(owner, amount, {from: investor}));
     });
 
-    it('the cost rises by 1% after the sale of each of the next million tokens', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('100'), ether('1200000'));
-        await buyTokenAndCheckBalance.call(this, investor, ether('100'), ether('2388118.811881188118811880'));//1% rise
-        await buyTokenAndCheckBalance.call(this, investor, ether('100'), ether('3564589.400116482236458938'));//2% rise
-        await buyTokenAndCheckBalance.call(this, investor, ether('1'), ether('3574298.137980559906361850'));//3% rise
+    it('the cost rises by 2% after the sale of each of the next million tokens', async function () {
+        await buyTokenAndCheckBalance.call(this, investor, ether('100'), ether('1000000'));
+        await buyTokenAndCheckBalance.call(this, investor, ether('102'), ether('2000000'));//2% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('104.04'), ether('3000000'));//2%+2% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('106.1208'), ether('4000000'));//2%+2%+2% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('108.243216'), ether('5000000'));//2%+2%+2%+2% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('110.40808032'), ether('6000000'));//2%+2%+2%+2%+2% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('112.6162419264'), ether('7000000'));//2%+2%+2%+2%+2%+2% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('114.868566764928'), ether('8000000'));//2%+2%+2%+2%+2%+2%+2% rise
     });
 
     it('the price is determined at the beginning of the transaction', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('1000'), ether('12000000'));
-        await buyTokenAndCheckBalance.call(this, investor, ether('10'), ether('12098214.285714285714285713'));//12% rise
+        await buyTokenAndCheckBalance.call(this, investor, ether('1000'), ether('10000000'));
+        await buyTokenAndCheckBalance.call(this, investor, ether('1.21899441999476'), ether('10010000.000000000023542024'));//~21.9% rise
     });
 
     it('should reject payments over cap', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('1666'), ether('19992000'));
-        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('1'), from: investor}));
+        await buyTokenAndCheckBalance.call(this, investor, ether('4499'), ether('44990000'));
+        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('3'), from: investor}));
     });
 
 });

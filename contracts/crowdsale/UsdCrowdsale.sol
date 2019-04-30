@@ -45,7 +45,7 @@ contract UsdCrowdsale is Crowdsale, Ownable {
         _processPurchase(beneficiary, tokens);
     }
 
-    function sendBountyTokens(address beneficiary, uint256 tokens) public onlyOwner {
+    function sendDirectTokens(address beneficiary, uint256 tokens) public onlyOwner {
         _processPurchase(beneficiary, tokens);
     }
 }

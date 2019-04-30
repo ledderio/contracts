@@ -1,7 +1,7 @@
 const {BN, balance, ether, should, shouldFail, time} = require('openzeppelin-test-helpers');
 
 const CrowdsaleSTO = artifacts.require('CrowdsaleSTO');
-const SharesToken = artifacts.require('LedderSharesToken');
+const SToken = artifacts.require('LedderSecurityToken');
 const OracleUSDETH = artifacts.require('OracleUSDETH');
 
 async function buyTokenAndCheckBalance(investor, investmentAmount, expectedTokenAmount) {
@@ -20,10 +20,10 @@ contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
 
     const RATE = new BN(40000);//Rate - $40
     const TOKENS = new BN('5000000000000000000000');//5000
-    const minUsdAmount = new BN('5000000000000000000000000'); //$5000
+    const minUsdAmount = new BN('5000000000000000000000'); //$5
 
     beforeEach(async function () {
-        this.token = await SharesToken.new(TOKENS, {from: deployer});
+        this.token = await SToken.new(TOKENS, {from: deployer});
         this.oracle = await OracleUSDETH.new({from: deployer});
         this.crowdsale = await CrowdsaleSTO.new(
             this.oracle.address,
@@ -49,29 +49,29 @@ contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
     it('should sending token', async function () {
         var amount=new BN(1000);
         var expectedTokenAmount=new BN(2000);
-        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
-        await this.crowdsale.sendBountyTokens(investor, amount, {from: owner});
+        await this.crowdsale.sendDirectTokens(investor, amount, {from: owner});
+        await this.crowdsale.sendDirectTokens(investor, amount, {from: owner});
         (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
         (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
-        await shouldFail.reverting(this.crowdsale.sendBountyTokens(owner, amount, {from: investor}));
+        await shouldFail.reverting(this.crowdsale.sendDirectTokens(owner, amount, {from: investor}));
     });
 
     it('should reject payments by disadvantage cap', async function () {
-        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('45'), from: investor}));
+        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('0.0445'), from: investor}));
     });
 
     it('should accept payments during the sale', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('46'), ether('126.5'));
+        await buyTokenAndCheckBalance.call(this, investor, ether('0.046'), ether('0.1265'));
     });
 
     it('should reject payments over cap', async function () {
-        await buyTokenAndCheckBalance.call(this, investor, ether('1765'), ether('4853.75'));
-        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('54'), from: investor}));
+        await buyTokenAndCheckBalance.call(this, investor, ether('1818'), ether('4999.5'));
+        await shouldFail.reverting(this.crowdsale.buyTokens(investor, {value: ether('0.2'), from: investor}));
     });
 
     it('should working purchase per USD', async function () {
-        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor,ether('4999'), {from: owner}));
-        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('5000'), ether('125'));
+        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor,ether('4.999'), {from: owner}));
+        await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('5.0'), ether('0.125'));
     });
 
 });

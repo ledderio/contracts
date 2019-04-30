@@ -1,7 +1,6 @@
 const {BN, should} = require('openzeppelin-test-helpers');
 const OracleUSDETH = artifacts.require('OracleUSDETH');
 
-
 contract('OracleUSDETH', function ([_, owner]) {
 
     beforeEach(async function () {
