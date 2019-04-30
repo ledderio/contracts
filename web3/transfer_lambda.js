@@ -242,7 +242,7 @@ const contractABI =  [
                 "type": "uint256"
             }
         ],
-        "name": "sendBountyTokens",
+        "name": "sendDirectTokens",
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
@@ -267,7 +267,7 @@ function createTX(sendAddress, count, contractAddress, txCount) {
     var contract = new web3.eth.Contract(contractABI, contractAddress);
 
     let ad = sendAddress.toString('hex');
-    //let tx_builder = contract.methods.sendBountyTokens(ad,count );
+    //let tx_builder = contract.methods.sendDirectTokens(ad,count );
     let tx_builder = contract.methods.buyTokensForUsd(ad, count);
     let encoded_tx = tx_builder.encodeABI();
     console.log(encoded_tx)

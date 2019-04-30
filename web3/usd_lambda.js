@@ -109,7 +109,7 @@ const contractABI = [
 const Web3 = require('web3')
 const Tx = require('ethereumjs-tx');
 const axios = require('axios');
-const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY))
+const web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY))
 const API_URL = 'https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD';
 
 function sendSigned(txData, cb) {
@@ -127,7 +127,7 @@ function createTX(rate, txCount) {
     const txData = {
         nonce: web3.utils.toHex(txCount),
         gasLimit: web3.utils.toHex(50000),
-        gasPrice: web3.utils.toHex(5e8),
+        gasPrice: web3.utils.toHex(1e9),
         to:  process.env.ORACLE_USD_ADDRESS,
         from: process.env.OWNER_ACCOUNT,
         data: encoded_tx,

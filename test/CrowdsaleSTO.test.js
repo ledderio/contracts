@@ -11,7 +11,7 @@ async function buyTokenAndCheckBalance(investor, investmentAmount, expectedToken
 }
 
 async function buyTokenAndCheckBalanceUsd(investor, owner, investmentAmount, expectedTokenAmount) {
-    await this.crowdsale.buyTokensForUsd(investor,investmentAmount, {from: owner});
+    await this.crowdsale.buyTokensForUsd(investor, investmentAmount, {from: owner});
     (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
     (await this.token.totalSupply()).should.be.bignumber.equal(expectedTokenAmount);
 }
@@ -47,8 +47,8 @@ contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
     });
 
     it('should sending token', async function () {
-        var amount=new BN(1000);
-        var expectedTokenAmount=new BN(2000);
+        var amount = new BN(1000);
+        var expectedTokenAmount = new BN(2000);
         await this.crowdsale.sendDirectTokens(investor, amount, {from: owner});
         await this.crowdsale.sendDirectTokens(investor, amount, {from: owner});
         (await this.token.balanceOf(investor)).should.be.bignumber.equal(expectedTokenAmount);
@@ -70,7 +70,7 @@ contract('CrowdsaleSTO', function ([_, deployer, owner, wallet, investor]) {
     });
 
     it('should working purchase per USD', async function () {
-        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor,ether('4.999'), {from: owner}));
+        await shouldFail.reverting(this.crowdsale.buyTokensForUsd(investor, ether('4.999'), {from: owner}));
         await buyTokenAndCheckBalanceUsd.call(this, investor, owner, ether('5.0'), ether('0.125'));
     });
 
