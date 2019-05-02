@@ -21,7 +21,6 @@ const ICO_WALLET = "0x6A798b59dBdf1D988541C79A79F0CBD8c8d8E4B1";
 module.exports = function (deployer) {
     deployer.then(async () => {
         const oracleContract = await deployer.deploy(Oracle);
-        // await oracleContract.setRate(new BN(160000), {from: deployer});//Oracle rate - $100
 
         const utContract = await deployer.deploy(LUT, ICO_TOKEN_COUNT);
         const icoContract = await deployer.deploy(

@@ -8,8 +8,7 @@ const contractABI = [
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x715018a6"
+        "type": "function"
     },
     {
         "constant": true,
@@ -23,8 +22,7 @@ const contractABI = [
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function",
-        "signature": "0x8da5cb5b"
+        "type": "function"
     },
     {
         "constant": true,
@@ -38,8 +36,7 @@ const contractABI = [
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function",
-        "signature": "0x8f32d59b"
+        "type": "function"
     },
     {
         "constant": false,
@@ -53,8 +50,7 @@ const contractABI = [
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0xf2fde38b"
+        "type": "function"
     },
     {
         "anonymous": false,
@@ -71,8 +67,7 @@ const contractABI = [
             }
         ],
         "name": "OwnershipTransferred",
-        "type": "event",
-        "signature": "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0"
+        "type": "event"
     },
     {
         "constant": false,
@@ -86,8 +81,7 @@ const contractABI = [
         "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
-        "type": "function",
-        "signature": "0x34fcf437"
+        "type": "function"
     },
     {
         "constant": true,
@@ -101,19 +95,18 @@ const contractABI = [
         ],
         "payable": false,
         "stateMutability": "view",
-        "type": "function",
-        "signature": "0x679aefce"
+        "type": "function"
     }
 ];
 
 const Web3 = require('web3')
 const Tx = require('ethereumjs-tx');
 const axios = require('axios');
-const web3 = new Web3(new Web3.providers.HttpProvider("https://mainnet.infura.io/v3/" + process.env.INFURA_API_KEY))
+const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/" + process.env.INFURA_API_KEY))
 const API_URL = 'https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=USD';
 
 function sendSigned(txData, cb) {
-    const privateKey = new Buffer(process.env.WALLET_KEY, 'hex')
+    const privateKey = Buffer.from(process.env.WALLET_KEY, 'hex');
     const transaction = new Tx(txData)
     transaction.sign(privateKey)
     const serializedTx = transaction.serialize().toString('hex')

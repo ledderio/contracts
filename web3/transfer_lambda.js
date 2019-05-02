@@ -256,7 +256,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io
 
 
 function sendSigned(txData, cb) {
-    const privateKey = new Buffer(process.env.WALLET_KEY, 'hex')
+    const privateKey = Buffer.from(process.env.WALLET_KEY, 'hex')
     const transaction = new Tx(txData)
     transaction.sign(privateKey)
     const serializedTx = transaction.serialize().toString('hex')
@@ -267,8 +267,8 @@ function createTX(sendAddress, count, contractAddress, txCount) {
     var contract = new web3.eth.Contract(contractABI, contractAddress);
 
     let ad = sendAddress.toString('hex');
-    //let tx_builder = contract.methods.sendDirectTokens(ad,count );
-    let tx_builder = contract.methods.buyTokensForUsd(ad, count);
+    let tx_builder = contract.methods.sendDirectTokens(ad,count );
+    //let tx_builder = contract.methods.buyTokensForUsd(ad, count);
     let encoded_tx = tx_builder.encodeABI();
     console.log(encoded_tx)
     const txData = {
@@ -283,6 +283,8 @@ function createTX(sendAddress, count, contractAddress, txCount) {
     return txData;
 }
 
+
+
 function buyUSD(address, amountUSD, contract) {
     web3.eth.getTransactionCount(process.env.OWNER_ACCOUNT).then(txCount => {
             const txData = createTX(address, amountUSD, contract, txCount);
@@ -295,4 +297,4 @@ function buyUSD(address, amountUSD, contract) {
 }
 
 //104434                                           50000000000000000000000
-buyUSD("0x43b63ddfF8AD2aB2762D90b7fC55c9BE37546Bfc", '51000000000000000000', "0x8eca8E0C770069d6b17d2a7A91A47F1556e323a7");
+buyUSD("0x43b63ddfF8AD2aB2762D90b7fC55c9BE37546Bfc", '10000000000000000000', "0xe914617Fe1f285864B6397C239D90Abf43a78799");

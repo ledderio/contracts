@@ -39,8 +39,8 @@ The minimum ULED token price will increase by 2% in each subsequent batch (One b
 * _Period_                      : 90 days
 * _Start_                       : 1 May 2018 00:00:00 GMT
 * _Wallet_                      : 0x6A798b59dBdf1D988541C79A79F0CBD8c8d8E4B1
-* _Token ULED_                  : -
-* _Crowdsale_                   : -
+* _Token ULED_                  : 0x9DbEC518f9650d9EF216D4FB0DC6dCe594dacC03
+* _Crowdsale_                   : 0x491B7247F8bB086b6038883cA7391FeB8c1942F2
 
 
 ### PreSTO
@@ -50,8 +50,8 @@ The minimum ULED token price will increase by 2% in each subsequent batch (One b
 * _Period_                      : 90 days
 * _Start_                       : 1 Feb 2018 00:00:00 GMT
 * _Wallet_                      : 0xFB6E4ED253a59FBDC5Bc19a50420E659B277863B
-* _Token SLED_                  : -
-* _Crowdsale_                   : -
+* _Token SLED_                  : 0xE4bE4a8C03b8E3209A41e76DEfa3083eE67A4FAd
+* _Crowdsale_                   : 0x854387480e25BdE0402AF9c6e77894B49754A265
 
 
 ## Wallets with ERC20 support
