@@ -33,7 +33,7 @@ The minimum ULED token price will increase by 2% in each subsequent batch (One b
 # Crowdsale types
 
 ### PreICO
-* _Minimal insvested limit_     : 5 USD
+* _Minimal insvested limit_     : 10000 USD
 * _Base price_                  : 1 ULED = 0.01 USD
 * _Hardcap_                     : 45 000 000 ULED (15 000 000 bounty)
 * _Period_                      : 90 days
@@ -44,7 +44,7 @@ The minimum ULED token price will increase by 2% in each subsequent batch (One b
 
 
 ### PreSTO
-* _Minimal insvested limit_     : 5 USD
+* _Minimal insvested limit_     : 10000 USD
 * _Techincally base price_      : 1 SLED = 40 USD
 * _Hardcap_                     : 5000 SLED
 * _Period_                      : 90 days
